@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('./config/config');
 var mysql  = require('mysql');
+const cors = require('cors');
 
 const port =  config.port;
 
@@ -10,7 +11,11 @@ var users = require('./routes/user');
 var auth = require('./routes/auth');
 var movieCategory = require('./routes/movieCategory');
 
+
 var app = express();
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //register Routes
