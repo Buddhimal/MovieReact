@@ -30,7 +30,6 @@ class MovieList extends Component {
             this.setState({isError: false})
             let data = response.data.data
 
-            console.log(data.data)
 
             let movies = data.map((movie) => {
                 return {
@@ -87,7 +86,7 @@ class MovieList extends Component {
     async deleteMovie(MovieId, row) {
 
         await axios.delete(
-            Config.BASE_URL + `/movie/${MovieId}`, {
+            Config.BASE_URL + `/movies/${MovieId}`, {
                 headers: {
                     "x-jwt-token": this.state.token,
                 },

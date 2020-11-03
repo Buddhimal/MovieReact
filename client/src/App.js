@@ -4,6 +4,8 @@ import ProtectedRoute from "./components/common/ProtectedRoute"
 import NavBar from "./components/common/NavBar";
 import Login from "./components/Login"
 import Home from "./components/MovieList"
+import NewMovie from "./components/AddMovie"
+import EditMovie from "./components/EditMovie"
 
 
 class App extends React.Component {
@@ -22,7 +24,9 @@ class App extends React.Component {
                     <NavBar/>
                     {/*<Login/>*/}
                     <Switch>
-                        <ProtectedRoute path="/admin/home" component={Home} exact/>
+                        <ProtectedRoute path="/home" component={Home} exact/>
+                        <ProtectedRoute path="/movie/new" component={NewMovie} exact/>
+                        <ProtectedRoute path="/movie/edit/:id" component={EditMovie} exact/>
                         <Route path="/login" component={Login} exact/>
                     </Switch>
                 </div>
