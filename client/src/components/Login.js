@@ -49,8 +49,7 @@ class Login extends Component {
             // do stuff
             this.setState({isError: false})
             let token = response.data.token;
-            let user_type = response.data.user_type;
-            // alert("done");
+            let user_type = response.data.type;
 
             // Auth.logIn(() => {
             //         this.props.history.push("/admin/home")
@@ -59,6 +58,7 @@ class Login extends Component {
 
             localStorage.setItem("authToken", JSON.stringify(token));
             localStorage.setItem("user_type", JSON.stringify(user_type));
+
             this.props.history.push('/home');
             // console.log(response.data.token);
         })

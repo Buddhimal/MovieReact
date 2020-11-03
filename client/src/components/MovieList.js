@@ -5,6 +5,7 @@ import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import jwt from "jsonwebtoken";
 import Config from "../config";
+import Auth from "./Auth"
 
 class MovieList extends Component {
 
@@ -17,10 +18,13 @@ class MovieList extends Component {
         isError: false,
         errorMsg: 'Internal Server Error!',
         deleted: false,
-        token: JSON.parse(localStorage.getItem("authToken"))
+        token: JSON.parse(localStorage.getItem("authToken")),
+        user_type: JSON.parse(localStorage.getItem("user_type"))
     };
 
     async componentDidMount() {
+
+        // alert(this.state.user_type);
 
         await axios.get('http://localhost:3000/api/movies', {
             headers: {
@@ -91,7 +95,7 @@ class MovieList extends Component {
                     "x-jwt-token": this.state.token,
                 },
             }).then(response => {
-            this.setState({deleted:true})
+            this.setState({deleted: true})
             this.handleDeleteRow(row)
 
         })
@@ -128,11 +132,16 @@ class MovieList extends Component {
                 <div className="row">
                     <div className="col-lg-12">
 
-                        <button className="btn btn-lg btn-info float-right"
+                        <div className="col-md-12 pull-right">
+                            <button className="btn btn-md btn-danger pull-right" onClick={() => this.logOut()}>Log Out
+                            </button>
+                        </div>
+                        <button className="btn btn-lg btn-info"
                                 onClick={() => this.props.history.push('/movie/new')}>
                             <i className="fa fa-plus-circle"></i>
                             Add New
                         </button>
+
                         <br/>
                         <br/>
                         <br/>
@@ -164,6 +173,7 @@ class MovieList extends Component {
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Name</th>
+                                            <th scope="col">Image</th>
                                             <th scope="col">Category</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Rating</th>
@@ -171,30 +181,50 @@ class MovieList extends Component {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {this.state.allMovies.map((mov,i) => (
+                                        {this.state.allMovies.map((mov, i) => (
 
                                             <tr key={i}>
-                                                <th scope="row">{i+1}</th>
+                                                <th scope="row">{i + 1}</th>
                                                 <td>{mov.name}</td>
+                                                <td><img width="30px" height="30px" src={mov.image_link}/></td>
                                                 <td>{mov.category}</td>
                                                 <td>{mov.description}</td>
                                                 <td>{mov.rating} / 10</td>
 
 
                                                 <td>
-                                                    <div className="action">
-                                                        <a href=""
-                                                           onClick={() => this.props.history.push(`/movie/edit/${mov.id}`)}
-                                                           className="text-success mr-4" data-toggle="tooltip"
-                                                           data-placement="top" title="" data-original-title="Edit">
-                                                            <i className="fa fa-pencil h5 m-0" title="Edit"></i>
-                                                        </a>
-                                                        <a onClick={() => this.confirmDelete(mov.id, i)}
-                                                           className="text-danger" data-toggle="tooltip"
-                                                           data-placement="top" title="" data-original-title="Close">
-                                                            <i className="fa fa-remove h5 m-0" title="Inactive"></i>
-                                                        </a>
-                                                    </div>
+                                                    {(() => {
+                                                        if (this.state.user_type == "admin") {
+                                                            return (
+                                                                <div className="action">
+                                                                    <a href=""
+                                                                       onClick={() => this.props.history.push(`/movie/edit/${mov.id}`)}
+                                                                       className="text-success mr-4"
+                                                                       data-toggle="tooltip"
+                                                                       data-placement="top" title=""
+                                                                       data-original-title="Edit">
+                                                                        <i className="fa fa-pencil h5 m-0"
+                                                                           title="Edit"></i>
+                                                                    </a>
+                                                                    <a onClick={() => this.confirmDelete(mov.id, i)}
+                                                                       className="text-danger" data-toggle="tooltip"
+                                                                       data-placement="top" title=""
+                                                                       data-original-title="Close">
+                                                                        <i className="fa fa-remove h5 m-0"
+                                                                           title="Inactive"></i>
+                                                                    </a>
+                                                                </div>
+                                                            )
+                                                        } else {
+                                                            return (
+                                                                <div className="action">
+                                                                    <p>Only admin can Edit</p>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    })()}
+
+
                                                 </td>
                                             </tr>
                                         ))}
@@ -210,6 +240,16 @@ class MovieList extends Component {
         )
     }
 
+    logOut() {
+        localStorage.clear()
+        Auth.logOut(() => {
+                this.props.history.push("/login")
+            }
+        )
+    }
+
+
 }
+
 
 export default withRouter(MovieList);
