@@ -6,8 +6,9 @@ class NavBar extends Component {
     render() {
         return (
             <nav className="navbar" style={{background:"#FFC312",color:"white"}}>
-                <Link to="/">Store</Link>
-                <Link to="/admin/home">Admin</Link>
+                <Link to="/">Movies</Link>
+                {/*<Link to="/">Store2</Link>*/}
+                {/*<Link to="/admin/home">Admin</Link>*/}
             </nav>
         );
     }

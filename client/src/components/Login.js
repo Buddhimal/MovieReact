@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import '../../assets/css/login.css';
+// import '../assets/css/login.css';
 import axios from "axios";
 import {withRouter} from 'react-router-dom';
-import Config from '../../config';
+import Config from '../config';
 import Auth from "./Auth"
 
 const jwt = require("jsonwebtoken");
@@ -28,31 +28,18 @@ class Login extends Component {
 
     onSubmitHandler = (event) => {
         event.preventDefault();
-
         this.checkAuth(this.state)
 
-        // console.log(this.state)
     }
 
-    // async componentWillMount() {
-    //     // localStorage.clear()
-    //     let userId = JSON.parse(localStorage.getItem("userId"))
-    //     await axios.get(Config.BASE_URL + `/admin/${userId}`, {
-    //         headers: {
-    //             "x-jwt-token": this.state.token,
-    //         },
-    //     }).then(response => {
-    //         Auth.logIn(() => {
-    //                 this.props.history.push("/admin/home")
-    //             }
-    //         )
-    //     })
-    // }
 
     checkAuth(user) {
+        // alert("came")
 
-        axios.post(Config.BASE_URL + '/admin/auth', {
-            email: user.username,
+
+
+        axios.post('http://localhost:3000/api/auth', {
+            username: user.username,
             password: user.password,
         }, {
             headers: {
@@ -62,22 +49,25 @@ class Login extends Component {
             // do stuff
             this.setState({isError: false})
             let token = response.data.token;
-            let userId = response.data.userId;
+            let user_type = response.data.user_type;
+            // alert("done");
 
-            Auth.logIn(() => {
-                    this.props.history.push("/admin/home")
-                }
-            )
+            // Auth.logIn(() => {
+            //         this.props.history.push("/admin/home")
+            //     }
+            // )
 
             localStorage.setItem("authToken", JSON.stringify(token));
-            localStorage.setItem("userId", JSON.stringify(userId));
+            localStorage.setItem("user_type", JSON.stringify(user_type));
             this.props.history.push('/admin/home');
             // console.log(response.data.token);
         })
             .catch(err => {
                 if (err.response) {
                     this.setState({isError: true})
-                    // console.log(err.response)
+                    console.log(err.response)
+                    localStorage.setItem("authToken", "");
+                    localStorage.setItem("userId", "");
                 } else if (err.request) {
                     // client never received a response, or request never left
                 } else {
@@ -96,7 +86,7 @@ class Login extends Component {
                     <div className="d-flex justify-content-center h-100">
                         <div className="card dark-background">
                             <div className="card-header">
-                                <h3>Sign In</h3>
+                                <h3>Log In</h3>
                             </div>
                             <div className="card-body">
                                 <form onSubmit={this.onSubmitHandler}>
