@@ -16,8 +16,15 @@ class Login extends Component {
             password: null,
             visibility: "hidden",
             isError: false,
-            token: JSON.parse(localStorage.getItem("authToken"))
+            // token: ''// JSON.parse(localStorage.getItem("authToken"))
+            token: localStorage.getItem("authToken") != null && localStorage.getItem("authToken") != undefined
+                ? ''
+                : '',
         };
+    }
+
+    componentDidMount() {
+        console.log(localStorage.getItem("authToken"))
     }
 
     myChangeHandler = (event) => {
@@ -35,7 +42,6 @@ class Login extends Component {
 
     checkAuth(user) {
         // alert("came")
-
 
 
         axios.post('http://localhost:3000/api/auth', {
@@ -59,8 +65,10 @@ class Login extends Component {
             localStorage.setItem("authToken", JSON.stringify(token));
             localStorage.setItem("user_type", JSON.stringify(user_type));
 
-            this.props.history.push('/home');
-            // console.log(response.data.token);
+            setInterval(() => {
+                this.props.history.push('/home');
+
+            }, 500)
         })
             .catch(err => {
                 if (err.response) {

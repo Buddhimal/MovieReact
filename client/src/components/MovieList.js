@@ -42,8 +42,7 @@ class MovieList extends Component {
                     category: movie.movie_category_id,
                     description: movie.description,
                     image_link: movie.image_link,
-                    rating: movie.rating,
-                    isActive: movie.isActive,
+                    rating: movie.rating
                 };
             });
 

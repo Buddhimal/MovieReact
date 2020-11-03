@@ -8,8 +8,47 @@ class AddMovie extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            categories: [],
             token: JSON.parse(localStorage.getItem("authToken"))
         };
+    }
+
+    async componentDidMount() {
+
+        // alert(this.state.user_type);
+
+        await axios.get(Config.BASE_URL + '/movie/category', {
+            headers: {
+                "x-jwt-token": this.state.token,
+            },
+        }).then(response => {
+            this.setState({isError: false})
+            let data = response.data.data
+
+
+            let category = data.map((cat) => {
+                return {
+                    id: cat.id,
+                    name: cat.category,
+                };
+            });
+
+            console.log(category);
+
+            this.setState({categories: category});
+        })
+            .catch(err => {
+                if (err.response) {
+                    let error = err.response
+                    this.setState({isError: true, errorMsg: error.data.msg})
+                    console.log(err.response)
+                } else if (err.request) {
+                    // client never received a response, or request never left
+                } else {
+                    // anything else
+                }
+            })
+
     }
 
     myChangeHandler = (event) => {
@@ -21,7 +60,7 @@ class AddMovie extends Component {
     onSubmitHandler = (event) => {
         event.preventDefault();
 
-            this.addMovie(this.state)
+        this.addMovie(this.state)
 
     }
 
@@ -78,8 +117,16 @@ class AddMovie extends Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"><i className="fa fa-text-height"></i></span>
                                     </div>
-                                    <input type="text" className="form-control" onChange={this.myChangeHandler}
-                                           name="type" placeholder="Type" required/>
+
+                                    <select name="type" onChange={this.myChangeHandler} className="form-control"
+                                            required>
+                                        {this.state.categories.map((cat, i) => (
+                                            <option value={cat.id} key={cat.id}> {cat.name} </option>
+                                        ))}
+                                    </select>
+
+                                    {/*<input type="text" className="form-control" onChange={this.myChangeHandler}*/}
+                                    {/*       name="type" placeholder="Type" required/>*/}
 
                                 </div>
                                 <div className="input-group form-group">
@@ -100,7 +147,8 @@ class AddMovie extends Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"><i className="fa fa-gratipay"></i></span>
                                     </div>
-                                    <input type="number" min="0" max={"10"} className="form-control" onChange={this.myChangeHandler}
+                                    <input type="number" min="0" max={"10"} className="form-control"
+                                           onChange={this.myChangeHandler}
                                            name="rating" placeholder="Rating" required/>
                                 </div>
                                 <div className="form-group">

@@ -13,7 +13,8 @@ class EditMovie extends Component {
             image_link: '',
             rating: '',
             type: '',
-            token: JSON.parse(localStorage.getItem("authToken"))
+            token: JSON.parse(localStorage.getItem("authToken")),
+            categories: [],
         };
     }
 
@@ -47,8 +48,44 @@ class EditMovie extends Component {
                     // anything else
                 }
             })
-
     }
+
+    async componentWillMount() {
+
+        await axios.get(Config.BASE_URL + '/movie/category', {
+            headers: {
+                "x-jwt-token": this.state.token,
+            },
+        }).then(response => {
+            this.setState({isError: false})
+            let data = response.data.data
+
+
+            let category = data.map((cat) => {
+                return {
+                    id: cat.id,
+                    name: cat.category,
+                };
+            });
+
+            console.log(category);
+
+            this.setState({categories: category});
+        })
+            .catch(err => {
+                if (err.response) {
+                    let error = err.response
+                    this.setState({isError: true, errorMsg: error.data.msg})
+                    console.log(err.response)
+                } else if (err.request) {
+                    // client never received a response, or request never left
+                } else {
+                    // anything else
+                }
+            })
+    }
+
+
 
     myChangeHandler = (event) => {
         let nam = event.target.name;
@@ -116,8 +153,14 @@ class EditMovie extends Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"><i className="fa fa-text-height"></i></span>
                                     </div>
-                                    <input type="text" className="form-control" onChange={this.myChangeHandler}
-                                           name="type" placeholder="Type" value={this.state.type} required/>
+                                    {/*<input type="text" className="form-control" onChange={this.myChangeHandler}*/}
+                                    {/*       name="type" placeholder="Type" value={this.state.type} required/>*/}
+                                    <select name="type" onChange={this.myChangeHandler} className="form-control"
+                                            required>
+                                        {this.state.categories.map((cat, i) => (
+                                            <option value={cat.id} key={cat.id}> {cat.name} </option>
+                                        ))}
+                                    </select>
 
                                 </div>
                                 <div className="input-group form-group">
