@@ -135,120 +135,128 @@ class MovieList extends Component {
                             <button className="btn btn-md btn-danger pull-right" onClick={() => this.logOut()}>Log Out
                             </button>
                         </div>
-                        <button className="btn btn-lg btn-info"
-                                onClick={() => this.props.history.push('/movie/new')}>
-                            <i className="fa fa-plus-circle"></i>
-                            Add New
-                        </button>
 
-                        <br/>
-                        <br/>
-                        <br/>
-                        <div className="card">
+                        {(() => {
+                            if (this.state.user_type == "admin") {
+                                return (
+                                    <button className="btn btn-lg btn-info"
+                                            onClick={() => this.props.history.push('/movie/new')}>
+                                        <i className="fa fa-plus-circle"></i>
+                                        Add New
+                                    </button>
+                                )
+                            } else {
+                            }
+                        })()}
+
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div className="card">
                             <div className="card-body">
-                                <h4 className="header-title mb-3">Movie List</h4>
+                            <h4 className="header-title mb-3">Movie List</h4>
 
-                                {(() => {
-                                    if (this.props.location.state != undefined) {
-                                        return (
-                                            <div className="alert alert-success" role="alert">
-                                                Successful.. New Movie Added Successfully.
-                                            </div>
-                                        )
-                                    }
-                                })()}
-                                {(() => {
-                                    if (this.state.deleted) {
-                                        return (
-                                            <div className="alert alert-success" role="alert">
-                                                Successful.. Movie Deleted Successfully.
-                                            </div>
-                                        )
-                                    }
-                                })()}
-                                <div className="table-responsive project-list">
-                                    <table className="table project-table table-centered table-nowrap">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Image</th>
-                                            <th scope="col">Category</th>
-                                            <th scope="col">Description</th>
-                                            <th scope="col">Rating</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {this.state.allMovies.map((mov, i) => (
+                            {(() => {
+                                if (this.props.location.state != undefined) {
+                                    return (
+                                        <div className="alert alert-success" role="alert">
+                                            Successful.. New Movie Added Successfully.
+                                        </div>
+                                    )
+                                }
+                            })()}
+                            {(() => {
+                                if (this.state.deleted) {
+                                    return (
+                                        <div className="alert alert-success" role="alert">
+                                            Successful.. Movie Deleted Successfully.
+                                        </div>
+                                    )
+                                }
+                            })()}
+                            <div className="table-responsive project-list">
+                            <table className="table project-table table-centered table-nowrap">
+                            <thead>
+                            <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.state.allMovies.map((mov, i) => (
 
-                                            <tr key={i}>
-                                                <th scope="row">{i + 1}</th>
-                                                <td>{mov.name}</td>
-                                                <td><img width="30px" height="30px" src={mov.image_link}/></td>
-                                                <td>{mov.category}</td>
-                                                <td>{mov.description}</td>
-                                                <td>{mov.rating} / 10</td>
-
-
-                                                <td>
-                                                    {(() => {
-                                                        if (this.state.user_type == "admin") {
-                                                            return (
-                                                                <div className="action">
-                                                                    <a href=""
-                                                                       onClick={() => this.props.history.push(`/movie/edit/${mov.id}`)}
-                                                                       className="text-success mr-4"
-                                                                       data-toggle="tooltip"
-                                                                       data-placement="top" title=""
-                                                                       data-original-title="Edit">
-                                                                        <i className="fa fa-pencil h5 m-0"
-                                                                           title="Edit"></i>
-                                                                    </a>
-                                                                    <a onClick={() => this.confirmDelete(mov.id, i)}
-                                                                       className="text-danger" data-toggle="tooltip"
-                                                                       data-placement="top" title=""
-                                                                       data-original-title="Close">
-                                                                        <i className="fa fa-remove h5 m-0"
-                                                                           title="Inactive"></i>
-                                                                    </a>
-                                                                </div>
-                                                            )
-                                                        } else {
-                                                            return (
-                                                                <div className="action">
-                                                                    <p>Only admin can Edit</p>
-                                                                </div>
-                                                            )
-                                                        }
-                                                    })()}
+                                <tr key={i}>
+                                    <th scope="row">{i + 1}</th>
+                                    <td>{mov.name}</td>
+                                    <td><img width="30px" height="30px" src={mov.image_link}/></td>
+                                    <td>{mov.category}</td>
+                                    <td>{mov.description}</td>
+                                    <td>{mov.rating} / 10</td>
 
 
-                                                </td>
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <td>
+                                        {(() => {
+                                            if (this.state.user_type == "admin") {
+                                                return (
+                                                    <div className="action">
+                                                        <a href=""
+                                                           onClick={() => this.props.history.push(`/movie/edit/${mov.id}`)}
+                                                           className="text-success mr-4"
+                                                           data-toggle="tooltip"
+                                                           data-placement="top" title=""
+                                                           data-original-title="Edit">
+                                                            <i className="fa fa-pencil h5 m-0"
+                                                               title="Edit"></i>
+                                                        </a>
+                                                        <a onClick={() => this.confirmDelete(mov.id, i)}
+                                                           className="text-danger" data-toggle="tooltip"
+                                                           data-placement="top" title=""
+                                                           data-original-title="Close">
+                                                            <i className="fa fa-remove h5 m-0"
+                                                               title="Inactive"></i>
+                                                        </a>
+                                                    </div>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div className="action">
+                                                        <p>Only admin can Edit</p>
+                                                    </div>
+                                                )
+                                            }
+                                        })()}
+
+
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                            </table>
+                            </div>
 
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            )
+                            }
 
-    logOut() {
-        localStorage.clear()
-        Auth.logOut(() => {
-                this.props.history.push("/login")
-            }
-        )
-    }
-
-
-}
+                            logOut() {
+                            localStorage.clear()
+                            Auth.logOut(() => {
+                            this.props.history.push("/login")
+                            }
+                            )
+                            }
 
 
-export default withRouter(MovieList);
+                            }
+
+
+                            export default withRouter(MovieList);
