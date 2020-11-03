@@ -10,6 +10,7 @@ const port =  config.port;
 var users = require('./routes/user');
 var auth = require('./routes/auth');
 var movieCategory = require('./routes/movieCategory');
+var movies = require('./routes/movies');
 
 
 var app = express();
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/movie/category', movieCategory);
+app.use('/api/movies', movies);
 
 const server = app.listen(port, function() {
     console.log('server spinned up ...');

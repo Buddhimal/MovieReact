@@ -1,7 +1,9 @@
 import React from "react";
 import {BrowserRouter, Route, Link, Switch} from "react-router-dom";
+import ProtectedRoute from "./components/common/ProtectedRoute"
 import NavBar from "./components/common/NavBar";
 import Login from "./components/Login"
+import Home from "./components/MovieList"
 
 
 class App extends React.Component {
@@ -18,7 +20,11 @@ class App extends React.Component {
             <BrowserRouter>
                 <div className="grid-container">
                     <NavBar/>
-                    <Login/>
+                    {/*<Login/>*/}
+                    <Switch>
+                        <ProtectedRoute path="/admin/home" component={Home} exact/>
+                        <Route path="/login" component={Login} exact/>
+                    </Switch>
                 </div>
             </BrowserRouter>
         );
