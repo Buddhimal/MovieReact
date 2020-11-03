@@ -16,16 +16,16 @@ class Login extends Component {
             password: null,
             visibility: "hidden",
             isError: false,
-            // token: ''// JSON.parse(localStorage.getItem("authToken"))
-            token: localStorage.getItem("authToken") != null && localStorage.getItem("authToken") != undefined
-                ? ''
-                : '',
+            token: ''// JSON.parse(localStorage.getItem("authToken"))
+            // token: localStorage.getItem("authToken") != null && localStorage.getItem("authToken") != undefined
+            //     ? ''
+            //     : '',
         };
     }
 
-    componentDidMount() {
-        console.log(localStorage.getItem("authToken"))
-    }
+    // componentDidMount() {
+    //     console.log(localStorage.getItem("authToken"))
+    // }
 
     myChangeHandler = (event) => {
         let nam = event.target.name;

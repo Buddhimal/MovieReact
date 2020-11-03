@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 
 // Retrieve all users
 router.get('/', function (req, res) {
-    conn.query('SELECT * FROM movies', function (error, results, fields) {
+    conn.query('SELECT m.name,image_link,rating,description,m.id,c.category as movie_category_id  FROM movies as m JOIN movie_category as c on c.id=m.movie_category_id', function (error, results, fields) {
         if (error) throw error;
         return res.send({error: false, data: results, message: 'movie list.'});
     });
